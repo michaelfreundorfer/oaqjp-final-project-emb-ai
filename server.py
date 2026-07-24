@@ -1,3 +1,4 @@
+"""This module runs a Flask web app."""
 from flask import Flask, request, render_template
 from EmotionDetection import emotion_detection
 
@@ -5,8 +6,8 @@ app = Flask(__name__)
 
 @app.route('/emotionDetector')
 def emotion_detector():
+    """This function serves as a route and analyzes emotions for a given input."""
     text_to_analzye = request.args.get("textToAnalyze")
-    response_string = ""
 
     if text_to_analzye == "":
         emotions_dict = emotion_detection.emotion_detector(text_to_analzye, 400)
@@ -17,8 +18,14 @@ def emotion_detector():
         if emotions_dict["dominant_emotion"] is None:
             response_string = "Invalid text! Please try again!"
         else:
-            response_string = f"For the given statement, the system response is 'anger': {emotions_dict['anger']}, 'disgust': {emotions_dict['disgust']}, 'fear': {emotions_dict['fear']}, 'joy': {emotions_dict['joy']} and 'sadness': {emotions_dict['sadness']}. The dominant emotion is {emotions_dict['dominant_emotion']}."
+            response_string = f"""For the given statement, the system response is
+            'anger': {emotions_dict['anger']}, 
+            'disgust': {emotions_dict['disgust']}, 
+            'fear': {emotions_dict['fear']}, 
+            'joy': {emotions_dict['joy']} and 
+            'sadness': {emotions_dict['sadness']}. 
+            The dominant emotion is {emotions_dict['dominant_emotion']}."""
 
-    return render_template("index.html", system_response = response)
+    return render_template("index.html", system_response = response_string)
 
 app.run()
